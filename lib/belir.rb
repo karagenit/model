@@ -11,11 +11,9 @@ module Belir
     end
 
     def calculate(*inputs)
-      # Convert 1 len arrays to fixnum, fixes weird behavior w/ lambda.call
-      inputs = inputs[0] if inputs.is_a?(Array) && inputs.length == 1
-      # And again, because solve could create a one elem array that is boxed into another array
-      inputs = inputs[0] if inputs.is_a?(Array) && inputs.length == 1
-      @lambda.call(inputs)
+      # We splat via *inputs, b/c while it does this for long arrays, it will error
+      # with single-element arrays like [2]: cant convert Array to Fixnum
+      @lambda.call(*inputs)
     end
   end
 
@@ -38,7 +36,7 @@ module Belir
             eqn.inputs.each do |input|
               args.push vars[input]
             end
-            vars[eqn.output] = eqn.calculate(args)
+            vars[eqn.output] = eqn.calculate(*args) # Splat to prevent [[2, 3]]
             found = true
           end
         end
