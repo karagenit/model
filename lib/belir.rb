@@ -12,7 +12,9 @@ module Belir
 
     def calculate(*inputs)
       # Convert 1 len arrays to fixnum, fixes weird behavior w/ lambda.call
-      inputs = inputs[0] if inputs.length == 1
+      inputs = inputs[0] if inputs.is_a?(Array) && inputs.length == 1
+      # And again, because solve could create a one elem array that is boxed into another array
+      inputs = inputs[0] if inputs.is_a?(Array) && inputs.length == 1
       @lambda.call(inputs)
     end
   end
@@ -32,9 +34,9 @@ module Belir
 
         @equations.each do |eqn|
           if vars[eqn.output].nil? && eqn.inputs.all? { |input| vars.key? input }
-            args = eqn.inputs.clone
-            args.collect! do |arg|
-              vars[arg]
+            args = []
+            eqn.inputs.each do |input|
+              args.push vars[input]
             end
             vars[eqn.output] = eqn.calculate(args)
             found = true
