@@ -16,8 +16,8 @@ task :clean do
 end
 
 task :test do
-    sh "rubocop lib/belir.rb"
     sh "./test/test-belir.rb"
+    sh "rubocop lib/belir.rb"
 end
 
 task :publish do
