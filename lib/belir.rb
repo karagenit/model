@@ -1,5 +1,7 @@
 module Belir
-
+  ##
+  # Represents an Equation with one output and multiple input values
+  #
   class Equation
     attr_reader :output
     attr_reader :inputs
@@ -11,12 +13,14 @@ module Belir
     end
 
     def calculate(*inputs)
-      # We splat via *inputs, b/c while it does this for long arrays, it will error
-      # with single-element arrays like [2]: cant convert Array to Fixnum
+      # Note the splat (*inputs) to convert [2] => 2
       @lambda.call(*inputs)
     end
   end
 
+  ##
+  # Represents a set or System of Equations
+  #
   class System
     def initialize(*equations)
       @equations = equations
@@ -29,7 +33,6 @@ module Belir
     def solve(vars)
       begin
         found = false
-
         @equations.each do |eqn|
           if vars[eqn.output].nil? && eqn.inputs.all? { |input| vars.key? input }
             args = []
@@ -40,10 +43,8 @@ module Belir
             found = true
           end
         end
-
       end while found
       vars
     end
   end
-
 end
