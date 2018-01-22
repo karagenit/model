@@ -18,8 +18,8 @@ module Belir
   end
 
   class System
-    def initialize
-      @equations = []
+    def initialize(*equations)
+      @equations = equations
     end
 
     def add_equation(eqn)
@@ -31,7 +31,7 @@ module Belir
         found = false
 
         @equations.each do |eqn|
-          if vars[eqn.output].nil? && eqn.inputs.all? { |in| vars.key? in }
+          if vars[eqn.output].nil? && eqn.inputs.all? { |input| vars.key? input }
             args = eqn.inputs.clone
             args.collect! do |arg|
               vars[arg]
