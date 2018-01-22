@@ -44,6 +44,7 @@ module Belir
         end
 
       end while found
+      vars
     end
   end
 

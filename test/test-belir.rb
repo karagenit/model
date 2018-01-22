@@ -21,6 +21,7 @@ class TestBelir < Test::Unit::TestCase
     bc = Belir::Equation.new(:c, :b) { |b| b + 3 }
     sys = Belir::System.new(ba, bc)
     vals = sys.solve( {b: 2} )
-    puts vals.inspect
+    assert_equal(vals[:a], 4)
+    assert_equal(vals[:c], 5)
   end
 end
