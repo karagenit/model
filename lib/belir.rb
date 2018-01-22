@@ -1,6 +1,7 @@
 module Belir
 
   class Equation
+    attr_reader :output
     attr_reader :inputs
 
     def initialize(output, *inputs, &block)
@@ -20,8 +21,27 @@ module Belir
     def initialize
       @equations = []
     end
-    def solve
-      {}
+
+    def add_equation(eqn)
+      @equations.push(eqn)
+    end
+
+    def solve(vars)
+      begin
+        found = false
+
+        @equations.each do |eqn|
+          if vars[eqn.output].nil? && eqn.inputs.all? { |in| vars.key? in }
+            args = eqn.inputs.clone
+            args.collect! do |arg|
+              vars[arg]
+            end
+            vars[eqn.output] = eqn.calculate(args)
+            found = true
+          end
+        end
+
+      end while found
     end
   end
 
