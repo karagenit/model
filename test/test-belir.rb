@@ -15,4 +15,12 @@ class TestBelir < Test::Unit::TestCase
     assert_equal(eq.calculate(2, 3), 5)
     # assert_raise(ArgumentError) { eq.calculate(2) }
   end
+
+  def test_system
+    ba = Belir::Equation.new(:a, :b) { |b| 2 * b }
+    bc = Belir::Equation.new(:c, :b) { |b| b + 3 }
+    sys = Belir::System.new(ba, bc)
+    vals = sys.solve( {b: 2} )
+    puts vals.inspect
+  end
 end
